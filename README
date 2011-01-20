@@ -1,0 +1,85 @@
+Overview
+------------
+
+This is a fairly simple jQuery Google Maps API v3 wrapper. It provides initialization of Google Maps. The ability to add a set of markers, center and zoom the map. Additionally, it also provides an interface to access the Google Maps object directly for more advanced usage
+
+See Google's doc for more details
+http://code.google.com/apis/maps/documentation/javascript/basics.html
+
+Note: Any method that takes a positional option can either be a google.maps.LatLng object or a custom object that looks like:
+var position = {lat:12.34, lng:56.78}
+
+This means you don't have to create new google.maps.LatLng and can rather pass these 'simpler' objects to the respective methods (init, center and set methods) 
+
+
+
+Methods
+------------
+
+gmap#init (Initialize method)
+
+$('#map-canvas').gmap('init', { disableDefaultUI:true, zoom: 18, center: {lat:38.89, lng:-77.02}  });
+// OR shortcut to init:
+$('#map-canvas').gmap({ disableDefaultUI:true, zoom: 18, center: {lat:38.89, lng:-77.02}  });
+
+Options are actually Google Maps options. See the following for a complete list of all options:
+http://code.google.com/apis/maps/documentation/javascript/reference.html#MapOptions
+
+
+
+gmap#set (Removes all existing markers and adds new markers if needed)
+
+var id = 1234;
+var markers = {
+	id: {
+		title: 'Marker #1'
+		position: {lat:38.89, lng:-77.02},
+    animation: google.maps.Animation.DROP
+	}
+};
+$('#map-canvas').gmap('set', markers);
+
+The markers object must specify unique IDs for each marker. The gmap.click event (see below) will pass this ID to the specified callback function. 
+If you add a marker that already exists on the map (as specified by it's ID), the marker will not be removed nor will be "updated" if new options are passed. Rather, just pass a new marker altogether with a new ID. This helps prevent the markers from flickering when a new set is added.
+
+Calling gmap#set with an empty object will clear all the markers. 
+$('#map-canvas').gmap('set', {});
+
+
+
+gmap#center (Center map at given point)
+$('#map-canvas').center({lat:38.89, lng:-77.02});
+
+
+
+gmap#zoom (Set map zoom level)
+$('#map-canvas').zoom(15);
+
+
+
+gmap#get (Get Google Maps object directly)
+var map = $('#map-canvas').get();
+console.debug(map.getCenter(), map.getBounds());
+
+
+
+Events 
+------------
+
+gmap.idle (Google Maps 'idle' event which is "fired when the map becomes idle after panning or zooming.")
+$('#map-canvas').bind('gmap.idle', function(ev, map){
+	// map is Google Maps object
+  console.debug(map.getBounds());
+});
+
+
+
+gmap.click (Fired when a Marker is click)
+$('#map-canvas').bind('gmap.click', function(ev, id, data) {
+	// id is marker ID (see above - gmap#set)
+	console.debug(id);
+
+	// data is an object: { map: <Google Maps object>, markers: <List of Markers Object (from gmap#set)>, options: <Map Options (from gmap#init)> }
+	console.debug(data);
+});
+
