@@ -34,7 +34,7 @@ var markers = {
 	id: {
 		title: 'Marker #1'
 		position: {lat:38.89, lng:-77.02},
-    animation: google.maps.Animation.DROP
+		animation: google.maps.Animation.DROP
 	}
 };
 $('#map-canvas').gmap('set', markers);
@@ -69,7 +69,7 @@ Events
 gmap.idle (Google Maps 'idle' event which is "fired when the map becomes idle after panning or zooming.")
 $('#map-canvas').bind('gmap.idle', function(ev, map){
 	// map is Google Maps object
-  console.debug(map.getBounds());
+	console.debug(map.getBounds());
 });
 
 
@@ -79,7 +79,7 @@ $('#map-canvas').bind('gmap.click', function(ev, id, data) {
 	// id is marker ID (see above - gmap#set)
 	console.debug(id);
 
-	// data is an object: { map: <Google Maps object>, markers: <List of Markers Object (from gmap#set)>, options: <Map Options (from gmap#init)> }
+	// data is an object: { map: <Google Maps object>, markers: <List of Markers Object (from gmap#set)>, options: <Init Options> }
 	console.debug(data);
 });
 
