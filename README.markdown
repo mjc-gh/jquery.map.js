@@ -10,7 +10,7 @@ This is a simple jQuery Google Maps API v3 wrapper. It provides map initializati
 
 [See Google's doc for more details](http://code.google.com/apis/maps/documentation/javascript/basics.html)
 
-Please see the demo.html file for demos and code examples. 
+Please see the demo.html file for demos and code examples. If you would like to see a feature or find a bug submit an issue. 
 
 _This plugin is used on [MyLatLng.com](http://mylatlng.com)._
 
@@ -86,7 +86,7 @@ Methods
 
 	Center the map at a given position.
 
-		$('#map-canvas').center({
+		$('#map-canvas').gmap('center', {
 	  	lat:38.89, lng:-77.02
 		});
 
@@ -95,7 +95,7 @@ Methods
 
 	Set the map zoom level
 
-	`$('#map-canvas').zoom(15);`
+	`$('#map-canvas').gmap('zoom', 15);`
 
 
 
@@ -103,10 +103,10 @@ Methods
 
 	Get the actual Google Maps object.
 
-		var map = $('#map-canvas').get();
+		var map = $('#map-canvas').gmap();
 		console.debug( map.getCenter(), map.getBounds() );
 
-
+	
 
 Events 
 ------
