@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<title>jQuery.map.js</title>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+		<script type="text/javascript" src="jquery.map.js"></script>
+		<style type="text/css">
+			body { width:900px; margin: 30px auto; }
+			.map { width:700px; height: 300px; margin: 0 auto; }
+		</style>
+	</head>
+	<body>
+		<h1>One Map</h1>
+		<div id="one-map" class="map"></div>
+		<script type="text/javascript">
+			$(function(){
+				$('#one-map').gmap('init', {
+					center: {lat:38.89, lng:-77.02},
+					zoom: 10, 
+				});
+			});
+		</script>
+		
+		<h1>Map Markers and Click Event</h1>
+		<div id="marker-map" class="map"></div>
+		<script type="text/javascript">
+			$(function(){
+				$('#marker-map').gmap('init', { 
+					disableDefaultUI:true, 
+					center: {lat:38.89, lng:-77.02},
+					zoom: 14, 
+				}).gmap('set', {
+					1234: {
+						title: 'Marker #1',
+						position: {lat:38.89, lng:-77.02},
+						animation: google.maps.Animation.DROP
+					},
+					5678: {
+						title: 'Marker #2',
+						position: {lat:38.895, lng:-77.02},
+						animation: google.maps.Animation.DROP
+					},
+					9012: {
+						title: 'Marker #3',
+						position: {lat:38.885, lng:-77.02},
+						animation: google.maps.Animation.DROP
+					}
+				});
+			}).bind('gmap.click', function(ev, id, data){
+				alert('Click ' + data.markers[id].title + ' (' + id + ')');
+			});
+		</script>
+		
+				
+		<h1>Center Map and Idle Event</h1>
+		<p><button value="ny">New York, NY</button> <button value="dc">Washington, DC</button></p>
+		<div id="center-map" class="map"></div>
+		<script type="text/javascript">
+			$(function(){
+				$('button').click(function(){
+					var pos = ( this.value == 'ny' ? {lat:40.77, lng:-73.98} : {lat:38.89, lng:-77.02} );
+					
+					$('#center-map').one('gmap.idle', function(ev, map){
+						alert(map.getCenter().toString());
+					}).gmap('center', pos);
+				});
+				
+				var map = $('#center-map').gmap('init', { 
+					disableDefaultUI:true, 
+					center: {lat:38.89, lng:-77.02},
+					zoom: 14, 
+				})
+			});
+		</script>
+		
+	</body>
+	
+</html>
