@@ -3,6 +3,7 @@
   var isGoogleLatLng = function(obj){
     if (typeof obj.lat == 'function')
       return true;
+      
     return false;
   };
   
