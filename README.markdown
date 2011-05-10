@@ -77,7 +77,7 @@ Methods
   
 	`$('#map-canvas').gmap('set', {});`
 
-	This helps prevent the markers from flickering when a new set is added. It's possible to access the current markers object via the following:
+	This method designed to prevent markers from flickering when adding new markers to an already existing set. It's possible to access the current markers object via the following:
 
 	`$('#map-canvas').data('gmap').markers` 
 
