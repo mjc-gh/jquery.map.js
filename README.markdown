@@ -1,5 +1,5 @@
-jQuery.map.js
-=========
+jQuery.map.js v2
+=============
 
 
 Overview
@@ -18,133 +18,18 @@ _This plugin is used on [MyLatLng.com](http://mylatlng.com)._
 Position Notes
 --------------
 
-Any method that takes a positional option can either be a google.maps.LatLng object or a custom object that looks like:
+Any method that takes a positional option can either be a google.maps.LatLng object, an Array or an Object
 
-`var position = {lat:12.34, lng:56.78}`
-
-This means you don't have to create new google.maps.LatLng and can rather pass objects like this to the respective methods (`init`, `center` and `set` methods) 
-
-
-Methods
--------
-
-* **init()**
-
-	This is the initialization method. Options are actually Google Maps options. Refer to [Google for details on all the options](http://code.google.com/apis/maps/documentation/javascript/reference.html#MapOptions)
-
-	Examples:
-
-		$('#map-canvas').gmap('init', { 
-			disableDefaultUI:true, 
-			center: {lat:38.89, lng:-77.02},
-			zoom: 18, 
-		});
-
-
-	Shortcut method:
-
-		$('#map-canvas').gmap({ 
-			disableDefaultUI:true, 
-			center: {lat:38.89, lng:-77.02},
-			zoom: 18
-		});
-
-
-* **set(markers)**
- 
-	Use this method to place a full set of markers on the map. The method accepts 1 argument which should be an object (associative array) mapping unique IDs to a marker object.  
-
-	The bindable gmap.click event (see below) will pass this ID to the specified callback function.
-
-	Refer to [Google for details on map markers](http://code.google.com/apis/maps/documentation/javascript/reference.html#Marker)
-
-		var markers = {
-			1234: {
-				title: 'Marker #1'
-				position: {lat:38.89, lng:-77.02},
-				animation: google.maps.Animation.DROP
-			},
-			5678: {
-				title: 'Marker #2'
-				position: {lat:34.05, lng:-69.23},
-				animation: google.maps.Animation.DROP
-			}
-		};
-
-	`$('#map-canvas').gmap('set', markers);`
-
-	This method is designed to set ALL of the markers on the given map. There is no 'update' feature for this method. If set is called more than once with identical marker IDs, the markers will not update. Rather, to "update" a marker call set with a new ID for that respective marker. Calling the `set` method with an empty object will clear all the markers.
-  
-	`$('#map-canvas').gmap('set', {});`
-
-	This method designed to prevent markers from flickering when adding new markers to an already existing set. It's possible to access the current markers object via the following:
-
-	`$('#map-canvas').data('gmap').markers` 
-
-
-* **center(position)**
-
-	Center the map at a given position.
-
-		$('#map-canvas').gmap('center', {
-	  	lat:38.89, lng:-77.02
-		});
-
-
-* **zoom(level)** 
-
-	Set the map zoom level
-
-	`$('#map-canvas').gmap('zoom', 15);`
-
-
-
-* **get()**
-
-	Get the actual Google Maps object.
-
-		var map = $('#map-canvas').gmap();
-		console.debug( map.getCenter(), map.getBounds() );
-
+    // array
+    var position = [12.34, 56.78];
 	
+    // object
+    var position = {lat:12.34, lng:56.78}
 
-Events 
-------
-	
-This wrapper also provides access to two commonly used Google Maps events
-
-
-* **gmap.idle** 
- 
-	The Google Maps 'idle' event which is "fired when the map becomes idle after panning or zooming. 
-
-	The callback will be passed an event object and a [Google Map](http://code.google.com/apis/maps/documentation/javascript/reference.html#Map) object.
-
-	Example: 
-
-		$('#map-canvas').bind('gmap.idle', function(ev, map){
-			// map is Google Maps object
-			console.debug(map.getBounds());
-		});
+This means you don't have to create new google.maps.LatLng and can just pass objects or array to the various methods.
 
 
-* **gmap.click**
+Documentation
+-------------
 
-	This event triggered when a Marker is clicked. 
-
-	The callback will be passed an event object, a marker ID, and object with the following structure
-
-		{ 
-			map: <Google Maps object>, 
-			markers: <Markers Set (from `set` method)>, 
-			options: <Initial Map Options <from `init` method> 
-		}
-
-
-	Example: 
-
-		$('#map-canvas').bind('gmap.click', function(ev, id, data) {
-			console.debug(id, data);
-			console.debug(data.map.getBounds());
-		});
-
+This plugin had a complete rewrite in 2/12 and docs need to be written. Refer to the demo page for the time being.

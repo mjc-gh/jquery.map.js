@@ -1,11 +1,12 @@
+<DOCTYPE html>
 <html>
 	<head>
 		<title>jQuery.map.js</title>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.map.js"></script>
 		<style type="text/css">
-			body { width:900px; margin: 30px auto; }
+			body { width:900px; margin: 30px auto 100px; }
 			.map { width:700px; height: 300px; margin: 0 auto; }
 		</style>
 	</head>
@@ -28,11 +29,16 @@
 		<div id="marker-map" class="map"></div>
 		<script type="text/javascript">
 			$(function(){
-				$('#marker-map').gmap('init', { 
+				var map = $('#marker-map').gmap('init', { 
 					disableDefaultUI:true, 
 					center: {lat:38.89, lng:-77.02},
 					zoom: 14, 
-				}).gmap('set', {
+				}).on('gmap.click', function(ev, id, data){
+					var markers = $(this).gmap('markers');
+					alert('Click ' + markers[id].title + ' (' + id + ')');
+				});
+				
+				var markers = {
 					1234: {
 						title: 'Marker #1',
 						position: {lat:38.89, lng:-77.02},
@@ -48,19 +54,20 @@
 						position: {lat:38.885, lng:-77.02},
 						animation: google.maps.Animation.DROP
 					}
-				});
-			}).bind('gmap.click', function(ev, id, data){
-				alert('Click ' + data.markers[id].title + ' (' + id + ')');
+				};
+			
+				for (var i in markers)
+					map.gmap('add', i, markers[i]);
 			});
 		</script>
 		
 				
 		<h1>Center Map and Idle Event</h1>
-		<p><button value="ny">New York, NY</button> <button value="dc">Washington, DC</button></p>
+		<p><button class="center" value="ny">New York, NY</button> <button class="center" value="dc">Washington, DC</button></p>
 		<div id="center-map" class="map"></div>
 		<script type="text/javascript">
 			$(function(){
-				$('button').click(function(){
+				$('.center').click(function(){
 					var pos = ( this.value == 'ny' ? {lat:40.77, lng:-73.98} : {lat:38.89, lng:-77.02} );
 					
 					$('#center-map').one('gmap.idle', function(ev, map){
@@ -74,6 +81,30 @@
 					zoom: 14, 
 				})
 			});
+		</script>
+		
+		<h1>Search via Google Geocoder</h1>
+		<input type="text" placeholder="Enter address" size="50">
+		<button id="geocode">Search</button>
+		<div id="search-map" class="map"></div>
+		<script type="text/javascript">
+			$(function(){
+				var map = $('#search-map').gmap('init', { zoom: 10 });
+				
+				var button = $('#geocode').on('click', function(){
+					var str = $(this).prev().val();
+					
+					// search return a Deferred (just like jquery ajax!)
+					map.gmap('search', str).then(function(result, status){
+						map.gmap('center', result[0].geometry.location);
+					});
+					
+				})
+				
+				button.prev().on('keypress', function(ev){
+					if (ev.which == 13) button.trigger('click');
+				});
+			})
 		</script>
 	</body>	
 </html>
