@@ -38,9 +38,6 @@
 		return new google.maps.MarkerImage(chart_api_url + (colors[color] || color));
 	}
 	
-	function create_info_window(content){
-		return new google.maps.InfoWindow({ content: content });
-	}
 	
 	function positions_to_lat_lng(obj){
 		var props = Array.prototype.slice.call(arguments, 1);
@@ -60,18 +57,10 @@
 	}
 	
 	function create_marker(elem, map, id, opts){
-		var info_window;
-		
 		if (opts.color){
 			opts.icon = create_icon(opts.color);
-			delete opts.color;
 		}
-
-		if (opts.content){
-			info_window = create_info_window(opts.content);
-			delete opts.content;
-		}
-
+		
 		var options = { map:map, zIndex:1 };
 		jQuery.extend(options, opts);
 		
@@ -79,11 +68,23 @@
 		var marker = new google.maps.Marker(options);
 		
 		google.maps.event.addListener(marker, 'click', function(ev){
+			// trigger map marker click event
 			elem.trigger('gmap.click', [id, marker]);
 			
-			if (info_window)
+			if (opts.infoWindow){
+				var info_window = new google.maps.InfoWindow();
+				
+				if (opts.infoWindow.content)
+					info_window.setContent(opts.infoWindow.content);
+				
+				// so if we don't have content yet, google doesnt show the window
+				// the window will be shown once content is set though (don't need to call open again)
 				info_window.open(map, marker);
-			
+				
+				// trigger info window open event passing the info window and opts
+				// this makes it possible to modify the original options and add in content
+				elem.trigger('gmap.open', [id, info_window, opts]);
+			}
 		});
 		
 		return marker;
@@ -103,8 +104,8 @@
 				if (!data) {
 					var options = jQuery.extend({
 						mapTypeId: google.maps.MapTypeId.ROADMAP,
-						streetViewControl: false, zoom: 14						
-				  }, opts);
+						streetViewControl: false, zoom: 14
+					}, opts);
 					
 					// convert center to google lat lng if needed
 					positions_to_lat_lng(options, 'center');
@@ -225,6 +226,6 @@
 		} else {
 			$.error('Method ' +  method + ' does not exist on jQuery.gmap');
 			
-		}		
+		}
 	}
 })(jQuery);
