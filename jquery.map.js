@@ -116,9 +116,9 @@
 					
 					// create map, bind events
 					var map = new google.maps.Map(this, options);
-				  google.maps.event.addListener(map, 'idle', function(){
+				  	google.maps.event.addListener(map, 'idle', function(){
 						elem.trigger('gmap.idle', [map]);
-				  });
+					});
 					
 				  // store data
 				  elem.data('gmap', {map:map, options:options, markers:{}});
